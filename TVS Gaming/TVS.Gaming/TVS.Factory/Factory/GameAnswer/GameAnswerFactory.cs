@@ -24,7 +24,7 @@ namespace TVS.Factory.Factory.GameAnswer
             {
                 //GameAnswerModel.AnswerId = gameAnswer.AnswerId;
                 gameAnswerModel.AnswerText = gameAnswer.AnswerText;
-
+                gameAnswerModel.IsCorrectAnswer = gameAnswer.IsCorrectAnswer;
                 char[] array = gameAnswer.AnswerText.ToCharArray();
                 Random rng = new Random();
                 int n = array.Length;

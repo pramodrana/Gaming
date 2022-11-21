@@ -24,12 +24,12 @@ namespace TVS.ApiService.Service.GameAnswer
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns></returns>
-        public async Task<List<Data.Models.GameAnswer>> GetAnswersByQuestionId(int questionId)
+        public List<Data.Models.GameAnswer> GetAnswersByQuestionId(int questionId)
         {
             try
             {
                 if (questionId >= 0) 
-                return await _gameAnswerRepository.GetGameAnswersByQuestionId(questionId);
+                return  _gameAnswerRepository.GetGameAnswersByQuestionId(questionId);
                 throw new ArgumentException(Constants.INVALID_ARGS);
             }
             catch (Exception ex)

@@ -18,9 +18,9 @@ namespace TVS.Repository.Repository.Generic
             this._tvsDbContext = tvsDbContext;
             table = _tvsDbContext.Set<T>();
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<List<T>> GetAll()
         {
-            return await (Task<IEnumerable<T>>)table.AsAsyncEnumerable();
+            return await (Task<List<T>>)table.ToListAsync();
         }
         public async Task<T> GetById(object id)
         {

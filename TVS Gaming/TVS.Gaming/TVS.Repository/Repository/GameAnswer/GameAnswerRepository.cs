@@ -13,13 +13,13 @@ namespace TVS.Repository.Repository.GameAnswer
 {
     public class GameAnswerRepository :GenericRepository<Data.Models.GameAnswer>, IGameAnswerRepository
     {
-        public async Task<List<Data.Models.GameAnswer>> GetGameAnswersByQuestionId(int questionid)
+        public List<Data.Models.GameAnswer> GetGameAnswersByQuestionId(int questionid)
         {
             try
             {
                 if (questionid > 0)
                 {
-                    return await _tvsDbContext.GameAnswers.Where(x => x.QuestionId == questionid).ToListAsync();
+                    return  _tvsDbContext.GameAnswers.Where(x => x.QuestionId == questionid).ToList();
                 }
                 else
                 {

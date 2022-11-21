@@ -14,7 +14,7 @@ namespace TVS.ApiService.Service.GameScore
         Task<Data.Models.GameScore> Get(long gameScoreId);
         Task<List<Data.Models.GameScore>> GetGameScoreListByUserId(long userId = 0);
         Task<List<Data.Models.GameScore>> GetGameScoreListByGameMode(long gameModeId);
-        Task<long> GetTotalScoresByUserAndGameMode(long userId, long gameModeId);
+        long GetTotalScoresByUserAndGameMode(long userId, long gameModeId);
         Task<long> GetTotalScoresByUserAndGame(long userId, long gameId);
         Task<List<Data.Models.GameScore>> GetGameScoreListByBadgeId(long badgeId);
         Task<Data.Models.GameScore> GetUsersGameScoreByCategoryAndMode(long gameCategoryId, long gameModeId, long userId);

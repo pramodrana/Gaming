@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using TVS.ApiService.Service.GameAnswer;
 using TVS.ApiService.Service.GameCategory;
@@ -5,6 +6,7 @@ using TVS.ApiService.Service.GameMode;
 using TVS.ApiService.Service.GameProperty;
 using TVS.ApiService.Service.GameQuestion;
 using TVS.ApiService.Service.GameScore;
+using TVS.Data.Models;
 using TVS.Factory.Factory.Game;
 using TVS.Factory.Factory.GameAnswer;
 using TVS.Factory.Factory.GameCategory;
@@ -30,6 +32,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<TVSMAZTCASDBUAT03Context,TVSMAZTCASDBUAT03Context>();
 #region Services
 builder.Services.AddTransient<IGameService, GameService>();
 builder.Services.AddTransient<IGameCategoryService, GameCategoryService>();

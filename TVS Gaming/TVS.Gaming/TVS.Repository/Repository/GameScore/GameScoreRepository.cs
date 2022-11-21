@@ -25,9 +25,9 @@ namespace TVS.Repository.Repository.GameScore
             {
                 if (userId > 0)
                 {
-                    long totalpoints = 0; 
-                    var scores= _tvsDbContext.GameScores.Where(x => x.UserId == userId);
-                    userProfile = scores.FirstOrDefault().User;
+                    long totalpoints = 0;
+                    var scores = _tvsDbContext.GameScores.Include(x => x.User).Where(x => x.UserId == userId);
+                    userProfile = (scores.ToList().Count > 0) ? scores.FirstOrDefault().User : null;
                     if (scores != null)
                     {
                         totalpoints = scores.Sum(x => x.GamePoints);
@@ -51,13 +51,13 @@ namespace TVS.Repository.Repository.GameScore
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Models.GameScore>> GetGameScoresByUserId(long userId)
+        public async Task<List<Data.Models.GameScore>> GetGameScoresByUserId(long userId)
         {
             try
             {
                 if (userId > 0)
                 {
-                    return await (Task<IEnumerable<Data.Models.GameScore>>)_tvsDbContext.GameScores.Where(x => x.UserId == userId).AsAsyncEnumerable();
+                    return await _tvsDbContext.GameScores.Where(x => x.UserId == userId).ToListAsync();
                 }
                 else
                 {
@@ -76,13 +76,13 @@ namespace TVS.Repository.Repository.GameScore
         /// </summary>
         /// <param name="gameModeId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Models.GameScore>> GetGameScoresByGameModeId(long gameModeId)
+        public async Task<List<Data.Models.GameScore>> GetGameScoresByGameModeId(long gameModeId)
         {
             try
             {
                 if (gameModeId > 0)
                 {
-                    return await (Task<IEnumerable<Data.Models.GameScore>>)_tvsDbContext.GameScores.Where(x => x.GameModeId == gameModeId).AsAsyncEnumerable();
+                    return await (Task<List<Data.Models.GameScore>>)((_tvsDbContext.GameScores.Include(x => x.User).Where(x => x.GameModeId == gameModeId)).ToListAsync());
                 }
                 else
                 {
@@ -101,13 +101,13 @@ namespace TVS.Repository.Repository.GameScore
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public async Task<long> GetTotalGamePointsByGameMode(long userId, long gameModeId)
+        public long GetTotalGamePointsByGameMode(long userId, long gameModeId)
         {
             try
             {
                 if (userId > 0)
                 {
-                    var gameScores = await _tvsDbContext.GameScores.Where(x => x.UserId == userId && x.GameModeId == gameModeId).ToListAsync();
+                    var gameScores =  _tvsDbContext.GameScores.Where(x => x.UserId == userId && x.GameModeId == gameModeId).ToList();
                     if (gameScores.Count > 0)
                     {
                         long totalPoints = gameScores.Sum(x => x.GamePoints);
@@ -178,7 +178,7 @@ namespace TVS.Repository.Repository.GameScore
             {
                 if (propertyId > 0)
                 {
-                    return await _tvsDbContext.GameScores.Where(x => x.BadgeId == propertyId).ToListAsync();
+                    return await _tvsDbContext.GameScores.Include(x => x.User).Where(x => x.BadgeId == propertyId).ToListAsync();
                 }
                 else
                 {

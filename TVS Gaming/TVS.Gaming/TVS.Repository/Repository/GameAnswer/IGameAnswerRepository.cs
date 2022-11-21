@@ -8,6 +8,6 @@ namespace TVS.Repository.Repository.GameAnswer
 {
     public interface IGameAnswerRepository
     {
-        Task<List<Data.Models.GameAnswer>> GetGameAnswersByQuestionId(int questionid);
+        List<Data.Models.GameAnswer> GetGameAnswersByQuestionId(int questionid);
     }
 }

@@ -16,13 +16,13 @@ namespace TVS.Repository.Repository.GameCategory
         /// </summary>
         /// <param name="gameCategoryCode"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<Data.Models.GameCategory>> GetGameGategoryListByGameId(long gameId)
+        public async Task<List<Data.Models.GameCategory>> GetGameGategoryListByGameId(long gameId)
         {
             try
             {
                 if (gameId > 0)
                 {
-                    return await (Task<IEnumerable<Data.Models.GameCategory>>)_tvsDbContext.GameCategories.Where(x => x.GameId == gameId).AsAsyncEnumerable();
+                    return await (Task<List<Data.Models.GameCategory>>)_tvsDbContext.GameCategories.Where(x => x.GameId == gameId).ToListAsync();
                 }
                 else
                 {

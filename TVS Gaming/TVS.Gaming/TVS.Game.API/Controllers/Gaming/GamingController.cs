@@ -15,6 +15,7 @@ using TVS.Data.Models;
 using TVS.Factory.Factory.GameAnswer;
 using TVS.Factory.Factory.GameScore;
 using TVS.Model.Models;
+using TVS.Model.Models.GameCategory;
 using TVS.Model.Models.GameQuestion;
 using TVS.Model.Models.GameScore;
 using TVS.Model.Models.Gaming;
@@ -212,12 +213,11 @@ namespace TVS.Game.API.Controllers.Gaming
         /// <param name="requestMapper"></param>
         /// <returns></returns>
         //[JwtAuthenticationFilter]
-        //[HttpPost]
         [Route("getquestions")]
         [HttpPost]
         public async Task<ResponseWithoutHeader<GameQuestionResponse,Response>> GetQuestions(JSONRequestMapper<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<GameQuestionResponse, Response> jSONResponseMapper = new ResponseWithoutHeader<GameQuestionResponse, Response>() { Data = new GameQuestionResponse(), Response = new Model.Models.Response() };
+            ResponseWithoutHeader<GameQuestionResponse, Response> response = new() { Data = new GameQuestionResponse() };
             this.ValidateGamingQuestion(requestMapper);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
@@ -230,7 +230,7 @@ namespace TVS.Game.API.Controllers.Gaming
                     List<GameQuestionModel> questionModelList = new List<GameQuestionModel>();
                     if (questionList.Count > 0)
                     {
-                        questionList.ForEach(async x =>
+                        questionList.ForEach( x =>
                         {
                             questionModelList.Add(new GameQuestionModel()
                             {
@@ -241,7 +241,7 @@ namespace TVS.Game.API.Controllers.Gaming
                                 HelpText = x.HelpText,
                                 QuestionImageUrl = x.QuestionImageUrl,
                                 Weightage = x.Weightage,
-                                Answers = _gameAnswerFactory.GameAnswerEntityToModelList(await _gameAnswerService.GetAnswersByQuestionId((int)x.QuestionId))
+                                Answers = _gameAnswerFactory.GameAnswerEntityToModelList(_gameAnswerService.GetAnswersByQuestionId((int)x.QuestionId))
                             });
                         });
                     }
@@ -250,13 +250,13 @@ namespace TVS.Game.API.Controllers.Gaming
                     var gameMode = await _gameModeService.GetGameModes();
                     if (gameMode.Count > 0)
                     {
-                        gameMode.ForEach(async x =>
+                        gameMode.ForEach(x =>
                         {
                             questionResponseModel.GameModeDetail.Add(new GameModeDetail()
                             {
                                 GameModeName = x.GameModeName,
                                 GameModeId = x.GameModeId,
-                                TotalCoins = await _gameScoreService.GetTotalScoresByUserAndGameMode(Convert.ToInt32(userId), x.GameModeId)
+                                TotalCoins =  _gameScoreService.GetTotalScoresByUserAndGameMode(Convert.ToInt32(userId), x.GameModeId)
                             });
                         });
                     }
@@ -268,21 +268,23 @@ namespace TVS.Game.API.Controllers.Gaming
                         questionResponseModel.HelpCoins = gameCategory.HelpCoins;
                         questionResponseModel.FlipCoins = gameCategory.FlipCoints;
                     }
-                    jSONResponseMapper.Data = questionResponseModel;
-                    jSONResponseMapper.Response = new Response(HttpStatusCode.OK, ResourceManager.GetResource(Constants.SUCCESS), ResourceManager.GetResource(Constants.SUCCESS));
-                    return jSONResponseMapper;
+
+                    questionResponseModel.Questions = questionModelList;
+                    response.Data = questionResponseModel;
+                    response.Response = new Response(HttpStatusCode.OK, ResourceManager.GetResource(Constants.SUCCESS), ResourceManager.GetResource(Constants.SUCCESS));
+                    return response;
                 }
                 else
                 {
-                    jSONResponseMapper.Response = new Response(HttpStatusCode.NotFound, ResourceManager.GetResource(Constants.FAILURE), ResourceManager.GetResource(Constants.RECORD_NOT_FOUND));
-                    return jSONResponseMapper;
+                    response.Response = new Response(HttpStatusCode.NotFound, ResourceManager.GetResource(Constants.FAILURE), ResourceManager.GetResource(Constants.RECORD_NOT_FOUND));
+                    return response;
                 }
             }
             catch (Exception ex)
             {
                 await _exceptionService.InsertLogException(ex.Message, ex.StackTrace, "Gaming", "Get Questions", string.Empty, "Gaming", string.Empty);
-                jSONResponseMapper.Response = new Response(HttpStatusCode.ExpectationFailed, Constants.FAILURE, Constants.DB_ERROR);
-                return jSONResponseMapper;
+                response.Response = new Response(HttpStatusCode.ExpectationFailed, Constants.FAILURE, Constants.DB_ERROR);
+                return response;
             }
         }
 
@@ -418,13 +420,13 @@ namespace TVS.Game.API.Controllers.Gaming
         [Route("getleadershipboard")]
         public async Task<ResponseWithoutHeader<LeadershipBoardResponse, Response>> GetLeadershipBoard([FromBody] JSONRequestMapper<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new ResponseWithoutHeader<LeadershipBoardResponse, Response>() { Data = new LeadershipBoardResponse() };
+            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
             this.ValidateLeadershipBoard(requestMapper);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
             {
-                LeadershipBoardResponse leadershipBoardResponse = new LeadershipBoardResponse();
-                List<LeadershipBoard> leadershipBoardList = new List<LeadershipBoard>();
+                LeadershipBoardResponse leadershipBoardResponse = new();
+                List<LeadershipBoard> leadershipBoardList = new();
                 var gameModeId = requestMapper.Data; //_gameModeService.GetGameModeIdByCode(requestMapper.Data);               
                 var listGameScores = await _gameScoreService.GetGameScoreListByGameMode(gameModeId);
                 if (listGameScores != null)
@@ -475,13 +477,13 @@ namespace TVS.Game.API.Controllers.Gaming
         [Route("getleadershipboardbybadge")]
         public async Task<ResponseWithoutHeader<LeadershipBoardResponse, Response>> GetLeadershipByBadge([FromBody] JSONRequestMapper<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new ResponseWithoutHeader<LeadershipBoardResponse, Response>() { Data = new LeadershipBoardResponse() };
+            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
             this.ValidateLeadershipBadge(requestMapper);
             try
             {
                 var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
-                LeadershipBoardResponse leadershipBoardResponse = new LeadershipBoardResponse();
-                List<LeadershipBoard> leadershipBoardList = new List<LeadershipBoard>();
+                LeadershipBoardResponse leadershipBoardResponse = new();
+                List<LeadershipBoard> leadershipBoardList = new();
                 var gameScores = await _gameScoreService.GetGameScoreListByBadgeId(requestMapper.Data);
                 if (gameScores != null)
                 {

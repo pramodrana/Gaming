@@ -2,6 +2,6 @@
 {
     public interface IGameAnswerService
     {
-        Task<List<Data.Models.GameAnswer>> GetAnswersByQuestionId(int questionId);
+        List<Data.Models.GameAnswer> GetAnswersByQuestionId(int questionId);
     }
 }

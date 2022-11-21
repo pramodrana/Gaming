@@ -196,13 +196,13 @@ namespace TVS.ApiService.Service.GameScore
         /// <param name="userId"></param>
         /// <param name="gameModeId"></param>
         /// <returns></returns>
-        public async Task<long> GetTotalScoresByUserAndGameMode(long userId,long gameModeId)
+        public long GetTotalScoresByUserAndGameMode(long userId,long gameModeId)
         {
             try
             {
                 if (userId > 0 && gameModeId > 0)
                 {
-                    return await _gameScoreRepository.GetTotalGamePointsByGameMode(userId, gameModeId);
+                    return  _gameScoreRepository.GetTotalGamePointsByGameMode(userId, gameModeId);
                 }
                 else
                 {
