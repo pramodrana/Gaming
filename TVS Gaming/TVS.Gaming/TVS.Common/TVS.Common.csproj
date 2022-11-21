@@ -15,6 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TVS.Model\TVS.Model.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Resources\TVSGamingResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

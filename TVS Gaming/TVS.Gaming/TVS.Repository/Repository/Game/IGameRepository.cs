@@ -9,6 +9,6 @@ namespace TVS.Repository.Repository.Game
 {
     public interface IGameRepository : IGenericRepository<Data.Models.Game>
     {
-
+      
     }
 }

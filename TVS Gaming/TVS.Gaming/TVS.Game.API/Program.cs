@@ -10,7 +10,16 @@ using TVS.Factory.Factory.GameAnswer;
 using TVS.Factory.Factory.GameCategory;
 using TVS.Factory.Factory.GameProperty;
 using TVS.Factory.Factory.GameScore;
+using TVS.Repository.Repository.ExceptionLog;
+using TVS.Repository.Repository.Game;
+using TVS.Repository.Repository.GameAnswer;
+using TVS.Repository.Repository.GameCategory;
+using TVS.Repository.Repository.GameMode;
+using TVS.Repository.Repository.GameProperty;
+using TVS.Repository.Repository.GameQuestion;
+using TVS.Repository.Repository.GameScore;
 using TVS.Service.Service.Game;
+using TVS.Service.Services.ExceptionLog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,33 +31,35 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 #region Services
-builder.Services.AddScoped<IGameService, GameService>();
-builder.Services.AddScoped<IGameCategoryService, GameCategoryService>();
-builder.Services.AddScoped<IGameQuestionService, GameQuestionService>();
-builder.Services.AddScoped<IGameAnswerService, GameAnswerService>();
-builder.Services.AddScoped<IGameScoreService, GameScoreService>();
-builder.Services.AddScoped<IGamePropertyService, GamePropertyService>();
-builder.Services.AddScoped<IGameModeService, GameModeService>();
+builder.Services.AddTransient<IGameService, GameService>();
+builder.Services.AddTransient<IGameCategoryService, GameCategoryService>();
+builder.Services.AddTransient<IGameQuestionService, GameQuestionService>();
+builder.Services.AddTransient<IGameAnswerService, GameAnswerService>();
+builder.Services.AddTransient<IGameScoreService, GameScoreService>();
+builder.Services.AddTransient<IGamePropertyService, GamePropertyService>();
+builder.Services.AddTransient<IGameModeService, GameModeService>();
+builder.Services.AddTransient<IExceptionService, ExceptionService>();
 #endregion
 
 #region Factories
-builder.Services.AddScoped<IGameFactory, GameFactory>();
-builder.Services.AddScoped<IGameCategoryFactory, GameCategoryFactory>();
+builder.Services.AddTransient<IGameFactory, GameFactory>();
+builder.Services.AddTransient<IGameCategoryFactory, GameCategoryFactory>();
 //builder.Services.AddScoped<IGameQuestionFactory, GameQuestionFactory>();
-builder.Services.AddScoped<IGameAnswerFactory, GameAnswerFactory>();
-builder.Services.AddScoped<IGameScoreFactory, GameScoreFactory>();
-builder.Services.AddScoped<IGamePropertyFactory, GamePropertyFactory>();
-builder.Services.AddScoped<IGameModeFactory, GameModeFactory>();
+builder.Services.AddTransient<IGameAnswerFactory, GameAnswerFactory>();
+builder.Services.AddTransient<IGameScoreFactory, GameScoreFactory>();
+builder.Services.AddTransient<IGamePropertyFactory, GamePropertyFactory>();
+builder.Services.AddTransient<IGameModeFactory, GameModeFactory>();
 #endregion
 
 #region Repositories
-builder.Services.AddScoped<IGameFactory, GameFactory>();
-builder.Services.AddScoped<IGameCategoryFactory, GameCategoryFactory>();
-builder.Services.AddScoped<IGameModeFactory, GameModeFactory>();
-//builder.Services.AddScoped<IGameQuestionFactory, GameQuestionFactory>();
-builder.Services.AddScoped<IGameAnswerFactory, GameAnswerFactory>();
-builder.Services.AddScoped<IGameScoreFactory, GameScoreFactory>();
-builder.Services.AddScoped<IGamePropertyFactory, GamePropertyFactory>();
+builder.Services.AddTransient<IGameRepository, GameRepository>();
+builder.Services.AddTransient<IGameCategoryRepository, GameCategoryRepository>();
+builder.Services.AddTransient<IGameModeRepository, GameModeRepository>();
+builder.Services.AddTransient<IGameQuestionRepository, GameQuestionRepository>();
+builder.Services.AddTransient<IGameAnswerRepository, GameAnswerRepository>();
+builder.Services.AddTransient<IGameScoreRepository, GameScoreRepository>();
+builder.Services.AddTransient<IGamePropertyRepository, GamePropertyRepository>();
+builder.Services.AddTransient<IExceptionRepository, ExceptionRepository>();
 #endregion
 
 
