@@ -45,9 +45,9 @@ namespace TVS.Game.API.Controllers.GameMode
         //[JwtAuthenticationFilter]
         [HttpGet]
         [Route("getgamemodes")]
-        public async Task<ResponseWithoutHeader<List<GameModeModel>, Response>> GetModes()
+        public async Task<ApiResponseBody<List<GameModeModel>, Response>> GetModes()
         {
-            ResponseWithoutHeader<List<GameModeModel>, Response> response = new ResponseWithoutHeader<List<GameModeModel>, Response>() { Data = new List<GameModeModel>() };
+            ApiResponseBody<List<GameModeModel>, Response> response = new ApiResponseBody<List<GameModeModel>, Response>() { Data = new List<GameModeModel>() };
             try
             {
                 List<GameModeModel> gameModeDtoList = new();

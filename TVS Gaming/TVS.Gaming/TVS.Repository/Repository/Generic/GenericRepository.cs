@@ -22,9 +22,9 @@ namespace TVS.Repository.Repository.Generic
         {
             return await (Task<List<T>>)table.ToListAsync();
         }
-        public async Task<T> GetById(object id)
+        public T GetById(object id)
         {
-            return await table.FindAsync(id);
+            return  table.Find(id);
         }
 
         public async Task<T> Insert(T obj)

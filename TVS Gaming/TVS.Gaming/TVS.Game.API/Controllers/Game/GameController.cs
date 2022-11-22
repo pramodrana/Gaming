@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Web.Http;
+using System.Web.Http.Controllers;
 using TVS.ApiService.Service.GameScore;
 using TVS.Common.Constant;
 using TVS.Common.Resources;
 using TVS.Factory.Factory.Game;
+using TVS.Game.API.Filters;
 using TVS.Model.Models;
 using TVS.Model.Models.Game;
 using TVS.Model.Models.GameQuestion;
@@ -25,18 +27,21 @@ namespace TVS.Game.API.Controllers.Game
         private readonly IGameScoreService _gameScoreService;
         private readonly IGameFactory _gameFactory;
         private readonly IExceptionService _exceptionService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         #endregion
 
         #region Constructor
         public GameController(IGameService gameService,
             IGameScoreService gameScoreService,
             IGameFactory gameFactory,
-            IExceptionService exceptionService)
+            IExceptionService exceptionService,
+            IHttpContextAccessor httpContextAccessor)
         {
             this._gameService = gameService;
             this._gameScoreService = gameScoreService;
             this._gameFactory = gameFactory;
             this._exceptionService = exceptionService;
+            _httpContextAccessor = httpContextAccessor; 
         }
         #endregion
 
@@ -45,12 +50,15 @@ namespace TVS.Game.API.Controllers.Game
         /// API to get list of properties (i.e. badges)
         /// </summary>
         /// <returns></returns>
-        //[JwtAuthenticationFilter]
+
+        [TokenValidtionAttribute]
         [HttpGet]
         [Route("getgames")]
-        public async Task<ResponseWithoutHeader<GameResponse, Response>> GetAllGames()
+        public async Task<ApiResponseBody<GameResponse, Response>> GetAllGames()
         {
-            ResponseWithoutHeader<GameResponse, Response> response = new() { Data = new GameResponse() };
+            //JwtAuthenticationFilter jwtAuthenticationFilter = new();
+            // jwtAuthenticationFilter.OnAuthorization(httpActionContext);
+            ApiResponseBody<GameResponse, Response> response = new() { Data = new GameResponse() };
             try
             {
                 var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);

@@ -6,12 +6,12 @@ namespace TVS.Model.Models.Gaming
     /// </summary>
     /// <typeparam name="HdrType"></typeparam>
     /// <typeparam name="DataType"></typeparam>
-    public class JSONRequestMapper<HdrType, DataType>
+    public class ApiRequestBody<HdrType, DataType>
     {
         /// <summary>
         /// JSONRequestMapper
         /// </summary>
-        public JSONRequestMapper()
+        public ApiRequestBody()
         { }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace TVS.Model.Models.Gaming
         /// </summary>
         /// <param name="strHdr"></param>
         /// <param name="strData"></param>
-        public JSONRequestMapper(HdrType strHdr, DataType strData)
+        public ApiRequestBody(HdrType strHdr, DataType strData)
         {
             Header = strHdr;
             Data = strData;

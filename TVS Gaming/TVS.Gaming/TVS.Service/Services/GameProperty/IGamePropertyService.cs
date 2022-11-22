@@ -9,7 +9,7 @@ namespace TVS.ApiService.Service.GameProperty
     public interface IGamePropertyService
     {
         Task<long> GetBadgeByScore(long score);
-        Task<string?> GetPropertyById(long propertyId);
+        string? GetPropertyById(long propertyId);
         Task<List<Data.Models.GameProperty>> GetAllProperties();
     }
 }

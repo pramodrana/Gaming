@@ -6,14 +6,14 @@ namespace TVS.Model.Models
     /// </summary>
     /// <typeparam name="HdrType"></typeparam>
     /// <typeparam name="DataType"></typeparam>
-    public class ResponseWithHeader<HdrType, DataType, ResponseData>
+    public class ApiResponseBodyWithHeader<HdrType, DataType, ResponseData>
     {
         /// <summary>
         /// cons
         /// </summary>
         /// <param name="strHeader"></param>
         /// <param name="strData"></param>
-        public ResponseWithHeader(HdrType strHeader, DataType strData, ResponseData strPage)
+        public ApiResponseBodyWithHeader(HdrType strHeader, DataType strData, ResponseData strPage)
         {
             Header = strHeader;
             Data = strData;
@@ -24,7 +24,7 @@ namespace TVS.Model.Models
         /// <summary>
         /// default cons
         /// </summary>
-        public ResponseWithHeader()
+        public ApiResponseBodyWithHeader()
         { }
 
         /// <summary>
@@ -44,44 +44,14 @@ namespace TVS.Model.Models
 
     }
   
-    public class ResponseWithHeader<HdrType, DataType>
+    public class ApiResponseBody<DataType, GamingResponseData>
     {
         /// <summary>
         /// cons
         /// </summary>
         /// <param name="strHeader"></param>
         /// <param name="strData"></param>
-        public ResponseWithHeader(HdrType strHeader, DataType strData)
-        {
-            Header = strHeader;
-            Data = strData;
-        }
-
-        /// <summary>
-        /// default cons
-        /// </summary>
-        public ResponseWithHeader()
-        { }
-
-        /// <summary>
-        /// header
-        /// </summary>
-        public HdrType Header { get; set; }
-
-        /// <summary>
-        /// data
-        /// </summary>
-        public DataType Data { get; set; }
-    }
-
-    public class ResponseWithoutHeader<DataType, GamingResponseData>
-    {
-        /// <summary>
-        /// cons
-        /// </summary>
-        /// <param name="strHeader"></param>
-        /// <param name="strData"></param>
-        public ResponseWithoutHeader(DataType strData, GamingResponseData strPage)
+        public ApiResponseBody(DataType strData, GamingResponseData strPage)
         {
 
             Data = strData;
@@ -92,7 +62,7 @@ namespace TVS.Model.Models
         /// <summary>
         /// default cons
         /// </summary>
-        public ResponseWithoutHeader()
+        public ApiResponseBody()
         { }
 
 

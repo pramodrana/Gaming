@@ -46,9 +46,9 @@ namespace TVS.Game.API.Controllers.GameProperty
         //[JwtAuthenticationFilter]
         [HttpGet]
         [Route("getproperties")]
-        public async Task<ResponseWithoutHeader<List<GamePropertyModel>, Response>> GetProperties()
+        public async Task<ApiResponseBody<List<GamePropertyModel>, Response>> GetProperties()
         {
-            ResponseWithoutHeader<List<GamePropertyModel>, Response> response = new() { Data = new List<GamePropertyModel>() };
+            ApiResponseBody<List<GamePropertyModel>, Response> response = new() { Data = new List<GamePropertyModel>() };
             try
             {
                 List<GamePropertyModel> gamePropertyDtoList = new();

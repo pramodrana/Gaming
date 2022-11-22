@@ -52,13 +52,13 @@ namespace TVS.ApiService.Service.GameCategory
         /// </summary>
         /// <param name="gameCategoryId"></param>
         /// <returns></returns>
-        public async Task<Data.Models.GameCategory> GetGameGategoryById(long gameCategoryId)
+        public Data.Models.GameCategory GetGameGategoryById(long gameCategoryId)
         {
             try
             {
                 if (gameCategoryId > 0)
                 {
-                    var category = await _gameCategoryRepository.GetById(gameCategoryId);
+                    var category =  _gameCategoryRepository.GetById(gameCategoryId);
                     return category;
                 }
                 else

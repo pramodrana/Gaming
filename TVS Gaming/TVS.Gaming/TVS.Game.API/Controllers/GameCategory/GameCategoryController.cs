@@ -42,7 +42,7 @@ namespace TVS.Game.API.Controllers.GameCategory
         #endregion
 
         #region Validaton
-        private void ValidateGameCategoryParameters(JSONRequestMapper<PagingParams, long> requestMapper)
+        private void ValidateGameCategoryParameters(ApiRequestBody<PagingParams, long> requestMapper)
         {
             if (requestMapper == null)
             {
@@ -77,9 +77,9 @@ namespace TVS.Game.API.Controllers.GameCategory
         //[JwtAuthenticationFilter]
         [HttpPost]
         [Route("getgamecategories")]
-        public async Task<ResponseWithoutHeader<GameCategoryResponse, Response>> GetAllGameCategory(JSONRequestMapper<PagingParams, long> requestMapper)
+        public async Task<ApiResponseBody<GameCategoryResponse, Response>> GetAllGameCategory(ApiRequestBody<PagingParams, long> requestMapper)
         {
-            ResponseWithoutHeader<GameCategoryResponse, Response> response = new() { Data = new GameCategoryResponse() };
+            ApiResponseBody<GameCategoryResponse, Response> response = new() { Data = new GameCategoryResponse() };
             this.ValidateGameCategoryParameters(requestMapper);
             try
             {

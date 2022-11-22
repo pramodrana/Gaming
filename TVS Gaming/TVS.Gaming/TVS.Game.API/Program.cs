@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Web.Http.Filters;
 using TVS.ApiService.Service.GameAnswer;
 using TVS.ApiService.Service.GameCategory;
 using TVS.ApiService.Service.GameMode;
@@ -12,6 +13,7 @@ using TVS.Factory.Factory.GameAnswer;
 using TVS.Factory.Factory.GameCategory;
 using TVS.Factory.Factory.GameProperty;
 using TVS.Factory.Factory.GameScore;
+using TVS.Game.API.Filters;
 using TVS.Repository.Repository.ExceptionLog;
 using TVS.Repository.Repository.Game;
 using TVS.Repository.Repository.GameAnswer;
@@ -31,7 +33,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 builder.Services.AddTransient<TVSMAZTCASDBUAT03Context,TVSMAZTCASDBUAT03Context>();
 #region Services
 builder.Services.AddTransient<IGameService, GameService>();
@@ -64,7 +66,13 @@ builder.Services.AddTransient<IGameScoreRepository, GameScoreRepository>();
 builder.Services.AddTransient<IGamePropertyRepository, GamePropertyRepository>();
 builder.Services.AddTransient<IExceptionRepository, ExceptionRepository>();
 #endregion
-
+builder.Services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+// Add services to the container.
+builder.Services.AddControllers(options =>
+{
+    //Microsoft.AspNetCore.Mvc.Filters.IFilterMetadata filterMetadata = options.Filters.Add<TokenValidtionAttribute>();
+    options.Filters.Add<TokenValidtionAttribute>();
+});
 
 var app = builder.Build();
 

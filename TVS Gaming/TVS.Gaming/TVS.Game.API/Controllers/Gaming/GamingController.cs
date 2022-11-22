@@ -70,7 +70,7 @@ namespace TVS.Game.API.Controllers.Gaming
 
 
         #region Validations
-        private void ValidateGamingQuestion(JSONRequestMapper<PagingParams, int> requestMapper)
+        private void ValidateGamingQuestion(ApiRequestBody<PagingParams, int> requestMapper)
         {
             if (requestMapper == null)
             {
@@ -142,7 +142,7 @@ namespace TVS.Game.API.Controllers.Gaming
             }
         }
 
-        private void ValidateLeadershipBoard(JSONRequestMapper<PagingParams, int> requestMapper)
+        private void ValidateLeadershipBoard(ApiRequestBody<PagingParams, int> requestMapper)
         {
             if (requestMapper == null)
             {
@@ -167,7 +167,7 @@ namespace TVS.Game.API.Controllers.Gaming
             }
         }
 
-        private void ValidateLeadershipBadge(JSONRequestMapper<PagingParams, int> requestMapper)
+        private void ValidateLeadershipBadge(ApiRequestBody<PagingParams, int> requestMapper)
         {
             if (requestMapper == null)
             {
@@ -215,9 +215,9 @@ namespace TVS.Game.API.Controllers.Gaming
         //[JwtAuthenticationFilter]
         [Route("getquestions")]
         [HttpPost]
-        public async Task<ResponseWithoutHeader<GameQuestionResponse,Response>> GetQuestions(JSONRequestMapper<PagingParams, int> requestMapper)
+        public async Task<ApiResponseBody<GameQuestionResponse,Response>> GetQuestions(ApiRequestBody<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<GameQuestionResponse, Response> response = new() { Data = new GameQuestionResponse() };
+            ApiResponseBody<GameQuestionResponse, Response> response = new() { Data = new GameQuestionResponse() };
             this.ValidateGamingQuestion(requestMapper);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
@@ -262,7 +262,7 @@ namespace TVS.Game.API.Controllers.Gaming
                     }
 
                     //Getting help & flip coins
-                    var gameCategory = await _gameCategoryService.GetGameGategoryById(requestMapper.Data);
+                    var gameCategory = _gameCategoryService.GetGameGategoryById(requestMapper.Data);
                     if (gameCategory != null)
                     {
                         questionResponseModel.HelpCoins = gameCategory.HelpCoins;
@@ -291,9 +291,9 @@ namespace TVS.Game.API.Controllers.Gaming
         //[JwtAuthenticationFilter]
         [HttpPost]
         [Route("savescores")]
-        public async Task<ResponseWithoutHeader<GameScore, Response>> SaveGameScore(GameScoreModel gameScoreModel)
+        public async Task<ApiResponseBody<GameScore, Response>> SaveGameScore(GameScoreModel gameScoreModel)
         {
-            ResponseWithoutHeader<GameScore, Response> jSONResponseMapper = new ResponseWithoutHeader<GameScore, Response>() { Data = new GameScore(), Response = new Model.Models.Response() };
+            ApiResponseBody<GameScore, Response> jSONResponseMapper = new ApiResponseBody<GameScore, Response>() { Data = new GameScore(), Response = new Model.Models.Response() };
             this.ValidateGameScore(gameScoreModel);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
@@ -328,9 +328,9 @@ namespace TVS.Game.API.Controllers.Gaming
         //[JwtAuthenticationFilter]
         [HttpPost]
         [Route("reducecoins")]
-        public async Task<ResponseWithoutHeader<long, Response>> ReduceCoins(GameScoreModel gameScoreModel)
+        public async Task<ApiResponseBody<long, Response>> ReduceCoins(GameScoreModel gameScoreModel)
         {
-            ResponseWithoutHeader<long, Response> jSONResponseMapper = new ResponseWithoutHeader<long, Response>() { Response = new Model.Models.Response() };
+            ApiResponseBody<long, Response> jSONResponseMapper = new ApiResponseBody<long, Response>() { Response = new Model.Models.Response() };
             this.ValidateGameScore(gameScoreModel);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
@@ -374,24 +374,24 @@ namespace TVS.Game.API.Controllers.Gaming
         /// <returns></returns>
         [HttpGet]
         [Route("getbadges")]
-        public async Task<ResponseWithoutHeader<List<BadgeModel>, Response>> GetBadges()
+        public async Task<ApiResponseBody<List<BadgeModel>, Response>> GetBadges()
         {
-            ResponseWithoutHeader<List<BadgeModel>, Response> response = new ResponseWithoutHeader<List<BadgeModel>, Response>() { Data = new List<BadgeModel>() };
+            ApiResponseBody<List<BadgeModel>, Response> response = new ApiResponseBody<List<BadgeModel>, Response>() { Data = new List<BadgeModel>() };
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
             {
-                List<BadgeModel> badges = new List<BadgeModel>();
+                List<BadgeModel> badges = new();
                 var gameScores = await _gameScoreService.GetGameScoreListByUserId(Convert.ToInt32(userId));
                 if (gameScores != null)
                 {
                     var scores = gameScores.GroupBy(i => i.BadgeId);
-                    scores.ToList().ForEach(async x =>
+                    scores.ToList().ForEach( x =>
                     {
                         badges.Add(new BadgeModel()
                         {
                             NumberOfBadges = x.Count(),
                             BadgeId = x.Key,
-                            BadgeName = await _gamePropertyService.GetPropertyById((long)x.Key),
+                            BadgeName = _gamePropertyService.GetPropertyById((long)x.Key),
                         });
                     });
                     response.Data = badges;
@@ -418,9 +418,9 @@ namespace TVS.Game.API.Controllers.Gaming
         /// <returns></returns>
         [HttpPost]
         [Route("getleadershipboard")]
-        public async Task<ResponseWithoutHeader<LeadershipBoardResponse, Response>> GetLeadershipBoard([FromBody] JSONRequestMapper<PagingParams, int> requestMapper)
+        public async Task<ApiResponseBody<LeadershipBoardResponse, Response>> GetLeadershipBoard([FromBody] ApiRequestBody<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
+            ApiResponseBody<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
             this.ValidateLeadershipBoard(requestMapper);
             var userId = Convert.ToString(((string[])Request.Headers.GetCommaSeparatedValues("userid"))[0]);
             try
@@ -475,9 +475,9 @@ namespace TVS.Game.API.Controllers.Gaming
         /// <returns></returns>
         [HttpPost]
         [Route("getleadershipboardbybadge")]
-        public async Task<ResponseWithoutHeader<LeadershipBoardResponse, Response>> GetLeadershipByBadge([FromBody] JSONRequestMapper<PagingParams, int> requestMapper)
+        public async Task<ApiResponseBody<LeadershipBoardResponse, Response>> GetLeadershipByBadge([FromBody] ApiRequestBody<PagingParams, int> requestMapper)
         {
-            ResponseWithoutHeader<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
+            ApiResponseBody<LeadershipBoardResponse, Response> response = new() { Data = new LeadershipBoardResponse() };
             this.ValidateLeadershipBadge(requestMapper);
             try
             {
@@ -506,7 +506,7 @@ namespace TVS.Game.API.Controllers.Gaming
 
                     leadershipBoardResponse.LeadershipBoardList = (List<LeadershipBoard>)CommonFunction.GetRecordList<LeadershipBoard>(leadershipBoardList, requestMapper.Header);
                     leadershipBoardResponse.PagingHeader = (PagingHeader)CommonFunction.GetPagingHeader(leadershipBoardList, requestMapper.Header, string.Empty);
-                    var badgeName = await _gamePropertyService.GetPropertyById(requestMapper.Data);
+                    var badgeName =  _gamePropertyService.GetPropertyById(requestMapper.Data);
                     response.Data = leadershipBoardResponse;
                     response.Response = (new Response(HttpStatusCode.OK, ResourceManager.GetResource(Constants.SUCCESS), badgeName));
                     return response;

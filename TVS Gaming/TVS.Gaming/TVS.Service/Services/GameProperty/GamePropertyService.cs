@@ -25,13 +25,13 @@ namespace TVS.ApiService.Service.GameProperty
         /// </summary>
         /// <param name="propertyId"></param>
         /// <returns></returns>
-        public async Task<string?> GetPropertyById(long propertyId)
+        public string? GetPropertyById(long propertyId)
         {
             try
             {
                 if (propertyId > 0)
                 {
-                    var property = await _gamePropertyRepository.GetById(propertyId);
+                    var property =  _gamePropertyRepository.GetById(propertyId);
                     if (property != null)
                     {
                         return property.PropertyName;

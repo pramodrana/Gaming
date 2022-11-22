@@ -85,13 +85,13 @@ namespace TVS.ApiService.Service.GameScore
         /// </summary>
         /// <param name="gameScore"></param>
         /// <returns></returns>
-        public async Task<Data.Models.GameScore> Get(long gameScoreId)
+        public Data.Models.GameScore Get(long gameScoreId)
         {
             try
             {
                 if (gameScoreId > 0) 
                 {
-                    return await _gameScoreRepository.GetById(gameScoreId);                    
+                    return  _gameScoreRepository.GetById(gameScoreId);                    
                 }
                 else
                 {

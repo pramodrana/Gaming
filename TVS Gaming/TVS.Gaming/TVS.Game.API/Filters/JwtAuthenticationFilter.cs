@@ -12,20 +12,21 @@ using TVS.Model.Models;
 using TVS.Common.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TVS.Game.API.Filters
 {
-    public class JwtAuthenticationFilter : AuthorizationFilterAttribute
+    public class JwtAuthenticationFilter : System.Web.Http.Filters.AuthorizationFilterAttribute, IActionFilter
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         public JwtAuthenticationFilter(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
         }
-        public JwtAuthenticationFilter() { }
+       public JwtAuthenticationFilter() { }
 
         private const string CommunicationKey = "GQDstc21ewfffffffffffFiwDffVvVBrk";
-
+       
         public override void OnAuthorization(HttpActionContext filterContext)
         {
             if (filterContext.Request.Headers.Contains("accesstoken"))
@@ -305,5 +306,10 @@ namespace TVS.Game.API.Filters
             ValidAudience = "http://www.example.com",
             IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(Encoding.UTF8.GetBytes(CommunicationKey)) // The same key as the one that generate the token
         };
+
+        public Task<HttpResponseMessage> ExecuteActionFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
